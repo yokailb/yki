@@ -227,7 +227,8 @@
     <div class="result">
       <div><strong>Valor Lavado:</strong> <span class="value" id="valorTotal">$0.00</span></div>
       <div><strong>Entregar ao Cliente:</strong> <span class="value" id="valorRestante">$0.00</span></div>
-      <div><strong>Devolver Ilegal (<span id="percentual">35%</span>):</strong> <span class="value" id="valorComissao">$0.00</span></div>
+      <div><strong>Máquina (5%):</strong> <span class="value" id="valorMaquina">$0.00</span></div>
+      <div><strong>Devolver Ilegal (<span id="percentual">30%</span>):</strong> <span class="value" id="valorComissao">$0.00</span></div>
     </div>
 
     <div class="buttons">
@@ -284,12 +285,18 @@
     function calcular() {
       const centavos = obterValorNumerico();
       const valorTotal = centavos / 100;
-      const percentual = parceriaAtiva ? 0.25 : 0.35;
+
+      const taxaMaquina = 0.05;
+      const valorMaquina = valorTotal * taxaMaquina;
+      const valorPosMaquina = valorTotal - valorMaquina;
+
+      const percentual = parceriaAtiva ? 0.20 : 0.30;
       const comissao = valorTotal * percentual;
       const restante = valorTotal - comissao;
 
-      document.getElementById("percentual").textContent = parceriaAtiva ? "25%" : "35%";
+      document.getElementById("percentual").textContent = parceriaAtiva ? "20%" : "30%";
       document.getElementById("valorTotal").textContent = formatarUSD(centavos);
+      document.getElementById("valorMaquina").textContent = formatarUSD(valorMaquina * 100);
       document.getElementById("valorComissao").textContent = formatarUSD(comissao * 100);
       document.getElementById("valorRestante").textContent = formatarUSD(restante * 100);
     }
@@ -304,6 +311,7 @@
     function limparCampos() {
       document.getElementById("valor").value = '';
       document.getElementById("valorTotal").textContent = "$0.00";
+      document.getElementById("valorMaquina").textContent = "$0.00";
       document.getElementById("valorComissao").textContent = "$0.00";
       document.getElementById("valorRestante").textContent = "$0.00";
       calcular();
@@ -313,6 +321,7 @@
       const nome = document.getElementById("nome").value.trim();
       const grupo = document.getElementById("grupo").value.trim();
       const valorTotal = document.getElementById("valorTotal").textContent;
+      const valorMaquina = document.getElementById("valorMaquina").textContent;
       const valorComissao = document.getElementById("valorComissao").textContent;
       const valorRestante = document.getElementById("valorRestante").textContent;
       const percentual = document.getElementById("percentual").textContent;
@@ -322,6 +331,7 @@
 Grupo: ${grupo || '[sem grupo]'}
 Valor Lavado: ${valorTotal}
 Entregar ao Cliente: ${valorRestante}
+Máquina (5%): ${valorMaquina}
 Devolver Ilegal (${percentual}): ${valorComissao}`;
 
       navigator.clipboard.writeText(textoCopiado).then(() => {
