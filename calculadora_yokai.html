@@ -288,17 +288,17 @@
 
       const taxaMaquina = 0.05;
       const valorMaquina = valorTotal * taxaMaquina;
-      const valorPosMaquina = valorTotal - valorMaquina;
 
       const percentual = parceriaAtiva ? 0.20 : 0.30;
       const comissao = valorTotal * percentual;
-      const restante = valorTotal - comissao;
+
+      const valorFinalCliente = valorTotal - comissao - valorMaquina;
 
       document.getElementById("percentual").textContent = parceriaAtiva ? "20%" : "30%";
       document.getElementById("valorTotal").textContent = formatarUSD(centavos);
       document.getElementById("valorMaquina").textContent = formatarUSD(valorMaquina * 100);
       document.getElementById("valorComissao").textContent = formatarUSD(comissao * 100);
-      document.getElementById("valorRestante").textContent = formatarUSD(restante * 100);
+      document.getElementById("valorRestante").textContent = formatarUSD(valorFinalCliente * 100);
     }
 
     function alternarParceria() {
